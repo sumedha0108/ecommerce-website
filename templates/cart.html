@@ -1,0 +1,70 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% block content %}
+{% include "header.html" %}
+
+<style>
+    .cart-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .product-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .product-info {
+        margin-right: 10px;
+    }
+
+    .quantity-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-btn {
+        margin: 0 5px;
+    }
+</style>
+
+<h1>Shopping Cart</h1>
+
+{% if cart_items %}
+    {% set total_price = 0 %}
+    {% for item in cart_items %}
+        <div class="cart-item">
+            <div class="product-details">
+                <div class="product-info">
+                    <h2>{{ item.name }}</h2>
+                    <h3>₹{{ item.product.price * item.quantity }}</h3>
+                    <img src="{{ url_for('static', filename=item.product.image_url) }}" alt="{{ item.product.name }}" style="max-width: 300px;">
+                </div>
+                <div class="quantity-container">
+                    <form method="post" action="{{ url_for('update_quantity') }}">
+                        <button type="submit" name="item_id" value="{{ item.id }}" class="quantity-btn" data-action="decrease">-</button>
+                        <input type="hidden" name="action" value="decrease">
+                    </form>
+                    <p>{{ item.quantity }}</p>
+                    <form method="post" action="{{ url_for('update_quantity') }}">
+                        <button type="submit" name="item_id" value="{{ item.id }}" class="quantity-btn" data-action="increase">+</button>
+                        <input type="hidden" name="action" value="increase">
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% set total_price = total_price + (item.product.price * item.quantity) %}
+    {% endfor %}
+    <p>Total Price: ₹{{ price }}</p>
+    <div>
+        {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+    </div>
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
+
+{% include "footer.html" %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% block content %}
+{% include "header.html" %}
+
+<h1>Fill the form and confirm order </h1>
+
+<p>Total amount : {{ total }}</p>
+
+<div> {{render_form(form, novalidate=True, button_map={"submit": "primary"}) }} </div>
+
+{% include "footer.html" %}
+{% endblock %}

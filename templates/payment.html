@@ -1,0 +1,13 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% block content %}
+{% include "header.html" %}
+
+<p>Total amount : {{ total }}</p>
+
+<h1>Choose Payment Method</h1>
+
+<div> {{render_form(form, novalidate=True, button_map={"submit": "primary"}) }} </div>
+
+
+{% include "footer.html" %}
+{% endblock %}
